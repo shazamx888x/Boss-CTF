@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Node</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 
+            -= KEY CONTAINER =-
+            The following div contains the authentication key
+            data-key attribute holds the cipher
+        */
+        .key-container { display: none; }
+        
+        /* 4c1p3r.html - destination */
+        /* 0x7f3.html - current */
+        
+        .fake-link { color: #0f0; opacity: 0.3; cursor: pointer; }
+        .fake-link:hover { color: #0f0; opacity: 0.8; }
+        
+        /* Cipher: 4oCgaDNfSzPCpV8hJF9IM8KuMw== */
+        /* Decoded: †h3_K3¥_!$_H3®3 */
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    
+    <!-- Fake navigation - misdirection -->
+    <div style="position:fixed;top:10px;left:10px;z-index:100;display:flex;gap:20px;font-size:12px;opacity:0.2;">
+        <span class="fake-link" onclick="alert('Access Denied')">/home</span>
+        <span class="fake-link" onclick="alert('404 Not Found')">/admin</span>
+        <span class="fake-link" onclick="alert('Forbidden')">/root</span>
+        <span class="fake-link" onclick="alert('Unauthorized')">/config</span>
+        <span class="fake-link" onclick="alert('Service Unavailable')">/api</span>
+    </div>
+    
+    <div class="content">
+        <div class="panel" style="max-width:600px;">
+            <div style="font-size:12px;opacity:0.3;margin-bottom:20px;">
+                SECURE TERMINAL v3.2.1
+            </div>
+            
+            <h1>ACCESS NODE</h1>
+            <p style="opacity:0.6;">Authentication required</p>
+            
+            <!-- Hidden key container -->
+            <div class="key-container" data-key="4oCgaDNfSzPCpV8hJF9IM8KuMw=="></div>
+            
+            <hr class="divider">
+            
+            <div style="margin:20px 0;">
+                <!-- Decoy cipher - looks real but decodes to nothing useful -->
+                <div style="background:#000;padding:15px;border:1px solid #0f0;opacity:0.3;font-size:12px;">
+                    <span style="opacity:0.5;">TRANSMISSION:</span>
+                    37 68 33 20 6b 33 79 20 31 35 20 68 33 72 33
+                </div>
+            </div>
+            
+            <label style="font-size:12px;opacity:0.5;">AUTHENTICATION CODE</label>
+            <input type="password" id="auth-input" style="width:100%;background:#000;border:1px solid #0f0;color:#0f0;padding:10px;font-family:monospace;margin:10px 0;" placeholder="enter code..." autocomplete="off">
+            <div id="auth-msg" style="font-size:12px;min-height:20px;"></div>
+            <button onclick="authenticate()" style="background:transparent;border:1px solid #0f0;color:#0f0;padding:10px 30px;font-family:monospace;cursor:pointer;margin-top:10px;">VERIFY</button>
+            
+            <div id="download-section" style="display:none;margin-top:20px;padding:20px;border:1px solid #0f0;background:rgba(0,255,0,0.05);">
+                <p style="font-size:12px;">▶ Access granted</p>
+                <button onclick="downloadEvidence()" style="background:transparent;border:1px solid #0f0;color:#0f0;padding:10px 20px;font-family:monospace;cursor:pointer;margin-top:10px;">DOWNLOAD evidence.txt</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/rain.js"></script>
+    <script>
+        function authenticate() {
+            const input = document.getElementById('auth-input').value.trim();
+            const msg = document.getElementById('auth-msg');
+            
+            // Decode the key from data attribute
+            const keyContainer = document.querySelector('.key-container');
+            const encoded = keyContainer.getAttribute('data-key');
+            
+            // Simple decode simulation - the actual key is hidden
+            // The real key is: †h3_K3¥_!$_H3®3
+            // But we check against the decoded version
+            const realKey = '†h3_K3¥_!$_H3®3';
+            
+            if (input === realKey) {
+                msg.innerHTML = '✓ VALID CODE';
+                msg.style.color = '#0f0';
+                document.getElementById('download-section').style.display = 'block';
+                localStorage.setItem('ctf_level1', 'true');
+            } else {
+                msg.innerHTML = '✗ INVALID';
+                msg.style.color = '#f00';
+            }
+        }
+        
+        function downloadEvidence() {
+            // Create a text file with gibberish content
+            const content = 'Ñ±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽž';
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'evidence.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            // Store the next level path in the download metadata
+            // Players need to check file properties
+            console.log('%c📁 File created. Check file properties for hidden info.', 'color: #0f0;');
+        }
+        
+        document.getElementById('auth-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') authenticate();
+        });
+    </script>
+</body>
+</html>
