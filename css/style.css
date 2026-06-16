@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+    --green: #00ff41;
+    --green-dim: #00cc33;
+    --bg: #000000;
+    --bg-panel: #050f05;
+    --border: #00ff4133;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+}
+
+#matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    padding: 30px;
+    max-width: 700px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0,255,65,0.05);
+}
+
+.panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+
+h1 {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    color: var(--green);
+    text-shadow: 0 0 20px var(--green);
+    margin-bottom: 15px;
+    letter-spacing: 0.1em;
+}
+
+hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+}
+
+input[type="text"],
+input[type="password"] {
+    background: #000;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    width: 100%;
+    outline: none;
+    font-size: 14px;
+}
+
+input:focus {
+    box-shadow: 0 0 20px rgba(0,255,0,0.1);
+}
+
+button {
+    background: transparent;
+    border: 1px solid #0f0;
+    color: #0f0;
+    padding: 10px 30px;
+    font-family: 'Share Tech Mono', monospace;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+}
+
+button:hover {
+    background: #0f0;
+    color: #000;
+    box-shadow: 0 0 30px rgba(0,255,0,0.2);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #0f0; opacity: 0.3; }
+
+@media (max-width: 600px) {
+    .panel { padding: 20px; }
+    .vault-grid { grid-template-columns: repeat(2, 1fr); }
+}
