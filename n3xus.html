@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CROSS BANK - Final Level</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body{background:radial-gradient(ellipse at center,#0a0a20,#000);font-family:'Press Start 2P',monospace;min-height:100vh;padding:20px;margin:0}
+        .bank-container{max-width:900px;margin:0 auto}
+        .bank-panel{background:rgba(10,10,20,0.95);border:3px solid #ff00ff;padding:35px;box-shadow:0 0 60px #ff00ff22,inset 0 0 60px #00ff8811;position:relative}
+        .bank-header{background:linear-gradient(135deg,#1a0033,#0a0a20);border:2px solid #00ff8833;padding:20px;margin-bottom:20px;text-align:center}
+        .bank-name{font-size:24px;color:#ff00ff;text-shadow:0 0 30px #ff00ff,0 0 60px #ff00ff44;letter-spacing:4px}
+        .bank-slogan{color:#00ff8844;font-size:8px;margin-top:5px;letter-spacing:3px}
+        .vault-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+        .vault-item{background:#000;border:2px solid #00ff8833;padding:10px;font-size:7px;text-align:center;color:#00ff8844;word-break:break-all;min-height:60px;display:flex;align-items:center;justify-content:center;transition:0.3s}
+        .vault-item:hover{border-color:#ff00ff55;box-shadow:0 0 20px #ff00ff11}
+        .vault-item.hash-item{border-color:#ff00ff33;color:#ff00ff33}
+        .vault-item.cipher-item{border-color:#00ff8833;color:#00ff8844}
+        .vault-input{width:100%;background:#000;border:2px solid #ff00ff;color:#00ff88;padding:12px;font-family:'Press Start 2P',monospace;font-size:10px;margin:10px 0;outline:none;box-shadow:inset 0 0 30px #ff00ff11}
+        .vault-input:focus{border-color:#00ff88;box-shadow:0 0 40px #00ff8822,inset 0 0 40px #00ff8811}
+        .btn-vault{background:transparent;border:2px solid #ff00ff;color:#ff00ff;padding:12px 30px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;transition:0.3s;width:100%}
+        .btn-vault:hover{background:#ff00ff;color:#000;box-shadow:0 0 40px #ff00ff33}
+        .security-level{display:flex;gap:5px;justify-content:center;margin:15px 0}
+        .security-dot{width:15px;height:15px;border:2px solid #00ff8833;background:#000}
+        .security-dot.active{background:#00ff88;box-shadow:0 0 20px #00ff88}
+        .security-dot.warning{background:#ff00ff;box-shadow:0 0 20px #ff00ff}
+        .security-dot.critical{background:#ff0000;box-shadow:0 0 20px #ff0000}
+        .hidden-path{display:none}
+    </style>
+</head>
+<body>
+    <div class="bank-container">
+        <div class="bank-panel">
+            <div class="bank-header">
+                <div class="bank-name">◈ CROSS BANK LIMITED ◈</div>
+                <div class="bank-slogan">SECURE VAULT v4.2.1 — ENCRYPTED CHANNEL</div>
+            </div>
+
+            <div style="text-align:center;margin-bottom:20px">
+                <div style="font-size:30px;color:#ff00ff;text-shadow:0 0 30px #ff00ff">🏦</div>
+                <h1 style="color:#00ff88;font-size:14px;margin-top:10px">VAULT ACCESS</h1>
+                <div style="width:40px;height:2px;background:linear-gradient(90deg,#00ff88,#ff00ff);margin:15px auto"></div>
+            </div>
+
+            <div class="security-level">
+                <div class="security-dot active"></div>
+                <div class="security-dot active"></div>
+                <div class="security-dot active"></div>
+                <div class="security-dot warning"></div>
+                <div class="security-dot critical"></div>
+            </div>
+
+            <div class="vault-grid">
+                <div class="vault-item cipher-item">U2FsdGVkX1/9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="vault-item hash-item">SHA512: 7f83b1657ff1fc53b92dc18148a1d65d7f83b1657ff1fc53b92dc18148a1d65d7f83b1657ff1fc53b92dc18148a1d65d7f83b1657ff1fc53b92dc18148a1d65d</div>
+                <div class="vault-item cipher-item">AES-256: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="vault-item hash-item">MD5: 5f4dcc3b5aa765d61d8327deb882cf995f4dcc3b5aa765d61d8327deb882cf995f4dcc3b5aa765d61d8327deb882cf995f4dcc3b5aa765d61d8327deb882cf99</div>
+                <div class="vault-item cipher-item">RSA: 2048-bit 7f8d3e2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="vault-item hash-item">SHA256: 2cf24dba5fb0a30e26e83b2ac5b9e29e2cf24dba5fb0a30e26e83b2ac5b9e29e2cf24dba5fb0a30e26e83b2ac5b9e29e2cf24dba5fb0a30e26e83b2ac5b9e29e</div>
+                <div class="vault-item cipher-item">Base64: U2FsdGVkX1/9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="vault-item hash-item">SHA1: a94a8fe5ccb19ba61c4c0873d391e987a94a8fe5ccb19ba61c4c0873d391e987a94a8fe5ccb19ba61c4c0873d391e987a94a8fe5ccb19ba61c4c0873d391e987</div>
+                <div class="vault-item cipher-item">Hex: 48656c6c6f20576f726c642048656c6c6f20576f726c642048656c6c6f20576f726c642048656c6c6f20576f726c642048656c6c6f20576f726c64</div>
+                <div class="vault-item hash-item">MD5: 7c6a180b36896a0a8c02787eeafb0e4c7c6a180b36896a0a8c02787eeafb0e4c7c6a180b36896a0a8c02787eeafb0e4c7c6a180b36896a0a8c02787eeafb0e4c</div>
+            </div>
+
+            <div style="margin:20px 0">
+                <label style="color:#00ff8844;font-size:9px;display:block;margin-bottom:5px">VAULT ACCESS CODE</label>
+                <input type="text" id="vault-input" class="vault-input" placeholder="ENTER CODE..." autocomplete="off">
+                <div id="vault-msg" style="font-size:9px;min-height:20px;color:#ff00ff;margin-top:5px"></div>
+                <button class="btn-vault" onclick="accessVault()">UNLOCK VAULT</button>
+            </div>
+
+            <div id="flag-container" style="display:none;margin-top:20px;padding:20px;border:3px solid #ff00ff;background:rgba(255,0,255,0.05);text-align:center">
+                <div style="font-size:30px;color:#ff00ff;text-shadow:0 0 30px #ff00ff">🏆</div>
+                <h2 style="color:#00ff88;font-size:14px;margin:10px 0">VAULT BREACHED</h2>
+                <div style="padding:15px;background:#000;border:2px solid #00ff88;margin:10px 0">
+                    <span style="font-family:monospace;font-size:12px;color:#ff00ff;word-break:break-all">picoCTF{MAtr1x_V4ult_Br34ch_2024}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function accessVault(){
+            const input=document.getElementById('vault-input').value.trim();
+            const msg=document.getElementById('vault-msg');
+            
+            if(!input){
+                msg.innerHTML='✗ ACCESS DENIED';
+                msg.style.color='#ff00ff';
+                return;
+            }
+            
+            if(input.includes('<script')||input.includes('onerror')||input.includes('alert')||input.includes('onload')||input.includes('src=')){
+                const popup=document.createElement('div');
+                popup.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#0a0a20,#1a0033);color:#00ff88;padding:35px;border:3px solid #ff00ff;font-family:"Press Start 2P",monospace;z-index:999999;text-align:center;box-shadow:0 0 80px #ff00ff33,inset 0 0 80px #00ff8811;min-width:320px';
+                popup.innerHTML='<div style="font-size:40px;color:#ff00ff;text-shadow:0 0 30px #ff00ff;margin-bottom:15px">🔓</div><h2 style="font-size:14px;margin-bottom:15px;color:#00ff88">VAULT PATH DISCOVERED</h2><div style="background:#000;padding:12px;margin:15px 0;border:2px solid #00ff88;font-size:10px;word-break:break-all;color:#ff00ff">/assets/vault.zip</div><div style="color:#00ff8844;font-size:8px;margin:10px 0">PASSWORD: Check file extension</div><button onclick="this.parentElement.remove()" style="background:#00ff88;color:#000;border:none;padding:12px 35px;font-family:\'Press Start 2P\',monospace;cursor:pointer;font-size:10px;margin-top:15px">CONTINUE</button>';
+                document.body.appendChild(popup);
+                
+                msg.innerHTML='✓ VAULT ACCESS GRANTED';
+                msg.style.color='#00ff88';
+                document.getElementById('vault-input').disabled=true;
+                localStorage.setItem('ctf_complete','true');
+                return;
+            }
+            
+            if(input==='zip'){
+                msg.innerHTML='✓ VAULT ACCESS GRANTED';
+                msg.style.color='#00ff88';
+                document.getElementById('flag-container').style.display='block';
+                document.getElementById('vault-input').disabled=true;
+                localStorage.setItem('ctf_complete','true');
+                return;
+            }
+            
+            msg.innerHTML='✗ ACCESS DENIED';
+            msg.style.color='#ff00ff';
+        }
+        
+        document.getElementById('vault-input').addEventListener('keydown',function(e){if(e.key==='Enter')accessVault()});
+    </script>
+</body>
+</html>
