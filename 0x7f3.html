@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NODE ACCESS - Level 1.5</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body{background:radial-gradient(ellipse at center,#0a0a20,#000);font-family:'Press Start 2P',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;margin:0}
+        .game-panel{background:rgba(10,10,20,0.95);border:3px solid #ff00ff;padding:40px;max-width:650px;width:100%;box-shadow:0 0 60px #ff00ff22,inset 0 0 60px #00ff8811;position:relative}
+        .game-panel::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border:2px solid #00ff88;z-index:-1;opacity:0.3}
+        .glitch-text{animation:glitch 2s infinite}
+        @keyframes glitch{0%{text-shadow:2px 0 #ff00ff,-2px 0 #00ff88}25%{text-shadow:-2px 0 #ff00ff,2px 0 #00ff88}50%{text-shadow:2px 0 #00ff88,-2px 0 #ff00ff}75%{text-shadow:-2px 0 #00ff88,2px 0 #ff00ff}100%{text-shadow:none}}
+        .fake-link{color:#00ff8844;cursor:pointer;transition:0.3s;font-size:10px;text-decoration:none}
+        .fake-link:hover{color:#00ff88;text-shadow:0 0 20px #00ff88}
+        .nav-bar{position:fixed;top:10px;left:10px;z-index:100;display:flex;gap:15px;font-size:9px;opacity:0.2;flex-wrap:wrap}
+        .nav-bar a{color:#00ff88;text-decoration:none;padding:5px 10px;border:1px solid transparent}
+        .nav-bar a:hover{border-color:#00ff8844;opacity:0.5}
+        .nav-bar a[data-cipher]{border-color:#ff00ff33}
+        input[type="password"]{width:100%;background:#000;border:2px solid #00ff88;color:#00ff88;padding:12px;font-family:'Press Start 2P',monospace;font-size:12px;margin:10px 0;outline:none;box-shadow:inset 0 0 20px #00ff8811}
+        input[type="password"]:focus{border-color:#ff00ff;box-shadow:0 0 30px #ff00ff22,inset 0 0 30px #ff00ff11}
+        .btn-game{background:transparent;border:2px solid #00ff88;color:#00ff88;padding:12px 30px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;transition:0.3s;width:100%}
+        .btn-game:hover{background:#00ff88;color:#000;box-shadow:0 0 40px #00ff8833}
+        .status-bar{height:4px;background:linear-gradient(90deg,#00ff88,#ff00ff,#00ff88);background-size:200%;animation:gradient 3s linear infinite;margin-bottom:20px}
+        @keyframes gradient{0%{background-position:0%}100%{background-position:200%}}
+        .cipher-display{background:#000;border:2px solid #00ff8833;padding:15px;margin:15px 0;font-size:10px;color:#00ff8844;text-align:center}
+        .health-bar{display:flex;gap:5px;margin:10px 0;justify-content:center}
+        .health-segment{width:20px;height:20px;border:2px solid #00ff8833;background:#000}
+        .health-segment.active{background:#00ff88;box-shadow:0 0 20px #00ff88}
+        .health-segment.warning{background:#ff00ff;box-shadow:0 0 20px #ff00ff}
+        .key-obfuscated{display:none}
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <a href="#" onclick="return false">/home</a>
+        <a href="#" onclick="return false">/admin</a>
+        <a href="#" onclick="return false">/root</a>
+        <a href="#" onclick="return false">/config</a>
+        <a href="#" onclick="return false" data-cipher="4oCgaDNfSzPCpV8hJF9IM8KuMw==">/api</a>
+        <a href="#" onclick="return false">/secure</a>
+        <a href="#" onclick="return false">/gateway</a>
+    </div>
+
+    <div class="game-panel">
+        <div class="status-bar"></div>
+        
+        <div style="text-align:center;margin-bottom:20px">
+            <div style="font-size:36px;color:#ff00ff;text-shadow:0 0 30px #ff00ff">⏣</div>
+            <h1 style="color:#00ff88;font-size:18px;margin-top:10px" class="glitch-text">NODE ACCESS</h1>
+            <div style="width:40px;height:2px;background:linear-gradient(90deg,#00ff88,#ff00ff);margin:15px auto"></div>
+        </div>
+
+        <div style="background:#000;border:2px solid #00ff8822;padding:15px;margin-bottom:20px">
+            <div style="color:#00ff8844;font-size:8px;text-align:center;letter-spacing:2px">SECURE TERMINAL v3.2.1</div>
+            <div style="display:flex;justify-content:center;gap:30px;margin-top:10px">
+                <div style="text-align:center">
+                    <div style="color:#00ff8844;font-size:7px">NODE</div>
+                    <div style="color:#00ff88;font-size:10px">0x7F3</div>
+                </div>
+                <div style="text-align:center">
+                    <div style="color:#00ff8844;font-size:7px">STATUS</div>
+                    <div style="color:#00ff88;font-size:10px">ONLINE</div>
+                </div>
+                <div style="text-align:center">
+                    <div style="color:#00ff8844;font-size:7px">ENCRYPTION</div>
+                    <div style="color:#ff00ff;font-size:10px">AES-256</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cipher-display">
+            <div style="color:#00ff8822;font-size:7px;letter-spacing:2px">TRANSMISSION INTERCEPT</div>
+            <div style="color:#00ff8844;font-size:9px;margin-top:5px;word-break:break-all">37 68 33 20 6b 33 79 20 31 35 20 68 33 72 33</div>
+            <div style="color:#ff00ff22;font-size:7px;margin-top:5px">◆ DECRYPT REQUIRED ◆</div>
+        </div>
+
+        <div style="margin:15px 0">
+            <label style="color:#00ff8844;font-size:9px;display:block;margin-bottom:5px">AUTHENTICATION CODE</label>
+            <input type="password" id="auth-input" placeholder="ENTER CODE..." autocomplete="off">
+            <div id="auth-msg" style="font-size:9px;min-height:20px;color:#ff00ff"></div>
+            <button class="btn-game" onclick="authenticate()">VERIFY</button>
+        </div>
+
+        <div id="download-section" style="display:none;margin-top:15px;padding:20px;border:3px solid #ff00ff;background:rgba(255,0,255,0.05)">
+            <div style="text-align:center;color:#00ff88;font-size:12px;margin-bottom:10px">◆ ACCESS GRANTED ◆</div>
+            <button class="btn-game" onclick="downloadEvidence()" style="border-color:#ff00ff;color:#ff00ff">DOWNLOAD evidence.txt</button>
+        </div>
+
+        <div class="health-bar" style="margin-top:20px">
+            <div class="health-segment active"></div>
+            <div class="health-segment"></div>
+            <div class="health-segment"></div>
+            <div class="health-segment"></div>
+            <div class="health-segment"></div>
+        </div>
+    </div>
+
+    <script>
+        (function(){
+            function getKeyFromDOM(){
+                const links = document.querySelectorAll('.nav-bar a[data-cipher]');
+                for(let link of links){
+                    const cipher = link.getAttribute('data-cipher');
+                    if(cipher){
+                        try{
+                            let decoded = atob(cipher);
+                            let result = '';
+                            for(let i = 0; i < decoded.length; i++){
+                                let charCode = decoded.charCodeAt(i);
+                                if(charCode >= 33 && charCode <= 126){
+                                    charCode = 33 + ((charCode - 33 + 47) % 94);
+                                }
+                                result += String.fromCharCode(charCode);
+                            }
+                            return result;
+                        } catch(e){
+                            continue;
+                        }
+                    }
+                }
+                return null;
+            }
+            
+            window.authenticate = function(){
+                const input = document.getElementById('auth-input').value.trim();
+                const msg = document.getElementById('auth-msg');
+                const realKey = getKeyFromDOM();
+                
+                if(!realKey){
+                    msg.innerHTML = '✗ SYSTEM ERROR';
+                    msg.style.color = '#ff00ff';
+                    return;
+                }
+                
+                if(input === realKey){
+                    msg.innerHTML = '✓ ACCESS GRANTED';
+                    msg.style.color = '#00ff88';
+                    document.getElementById('download-section').style.display = 'block';
+                    localStorage.setItem('ctf_level1', 'true');
+                }else{
+                    msg.innerHTML = '✗ ACCESS DENIED';
+                    msg.style.color = '#ff00ff';
+                }
+            };
+            
+            window.downloadEvidence = function(){
+                const content = 'Ñ±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽž';
+                const blob = new Blob([content], {type: 'text/plain'});
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'evidence.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+            
+            document.getElementById('auth-input').addEventListener('keydown', function(e){
+                if(e.key === 'Enter') window.authenticate();
+            });
+        })();
+    </script>
+</body>
+</html>
