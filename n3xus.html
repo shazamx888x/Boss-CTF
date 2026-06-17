@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER VAULT - Final Level</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:radial-gradient(ellipse at center,#0a0a20,#000);font-family:'Press Start 2P',monospace;min-height:100vh;padding:20px;margin:0;color:#00ff88}
+        .container{max-width:1100px;margin:0 auto}
+        .main-panel{background:rgba(10,10,20,0.95);border:3px solid #ff00ff;padding:35px;box-shadow:0 0 80px #ff00ff22,inset 0 0 80px #00ff8811;position:relative}
+        .main-panel::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border:2px solid #00ff88;z-index:-1;opacity:0.2}
+        .header{background:linear-gradient(135deg,#1a0033,#0a0a20);border:2px solid #00ff8833;padding:20px;margin-bottom:20px;text-align:center}
+        .header h1{font-size:22px;color:#ff00ff;text-shadow:0 0 30px #ff00ff,0 0 60px #ff00ff44;letter-spacing:4px}
+        .header p{color:#00ff8844;font-size:8px;margin-top:8px;letter-spacing:3px}
+        .badge{display:inline-block;background:rgba(255,0,255,0.1);border:1px solid #ff00ff33;padding:5px 15px;font-size:8px;color:#ff00ff88;letter-spacing:2px;margin-bottom:15px}
+        .grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:15px 0}
+        .grid-item{background:#000;border:1px solid #00ff8833;padding:8px;font-size:5px;text-align:center;color:#00ff8844;word-break:break-all;min-height:45px;display:flex;align-items:center;justify-content:center;transition:0.3s;font-family:'Share Tech Mono',monospace}
+        .grid-item:hover{border-color:#ff00ff55;box-shadow:0 0 20px #ff00ff11}
+        .grid-item.hash{color:#ff00ff33;border-color:#ff00ff33}
+        .grid-item.cipher{color:#00ff8844;border-color:#00ff8833}
+        .section-title{color:#00ff8844;font-size:7px;text-align:center;margin:15px 0 10px 0;letter-spacing:3px;opacity:0.5}
+        .vault-area{background:rgba(0,0,0,0.6);border:2px solid #ff00ff33;padding:25px;margin:20px 0;position:relative}
+        .vault-area::after{content:'🔒';position:absolute;top:-12px;right:20px;font-size:20px;opacity:0.3}
+        .input-label{color:#00ff8844;font-size:8px;display:block;margin-bottom:8px;letter-spacing:2px}
+        .code-input{width:100%;background:#000;border:2px solid #ff00ff;color:#00ff88;padding:14px;font-family:'Press Start 2P',monospace;font-size:10px;outline:none;box-shadow:inset 0 0 30px #ff00ff11;display:block}
+        .code-input:focus{border-color:#00ff88;box-shadow:0 0 40px #00ff8822,inset 0 0 40px #00ff8811}
+        .code-input:disabled{opacity:0.12;cursor:not-allowed;border-color:#333;color:#333;background:#0a0a0a}
+        .code-input:not(:disabled){opacity:1}
+        .btn-vault{background:transparent;border:2px solid #ff00ff;color:#ff00ff;padding:14px 30px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;transition:0.3s;width:100%;display:block;margin-top:12px;letter-spacing:2px}
+        .btn-vault:hover:not(:disabled){background:#ff00ff;color:#000;box-shadow:0 0 40px #ff00ff33}
+        .btn-vault:disabled{opacity:0.12;cursor:not-allowed;border-color:#333;color:#333}
+        .btn-vault:not(:disabled){opacity:1}
+        .msg-area{font-size:8px;min-height:25px;color:#ff00ff;margin-top:10px;text-align:center;padding:8px;background:rgba(0,0,0,0.3)}
+        .msg-area.success{color:#00ff88;border-left:3px solid #00ff88}
+        .msg-area.error{color:#ff0000;border-left:3px solid #ff0000}
+        .msg-area.warning{color:#ff00ff;border-left:3px solid #ff00ff}
+        .attempt-display{color:#ff00ff44;font-size:7px;text-align:center;margin-top:12px;letter-spacing:2px}
+        .hint-text{background:rgba(255,0,255,0.05);border:1px solid #ff00ff33;padding:12px;margin:15px 0;text-align:center;color:#ff00ff55;font-size:7px;letter-spacing:1px}
+        .hint-text span{color:#ff00ff99}
+        .status-dots{display:flex;gap:6px;justify-content:center;margin:15px 0}
+        .status-dot{width:14px;height:14px;border:2px solid #00ff8833;background:#000;transition:0.3s;border-radius:50%}
+        .status-dot.active{background:#00ff88;border-color:#00ff88;box-shadow:0 0 20px #00ff88}
+        .status-dot.warning{background:#ff00ff;border-color:#ff00ff;box-shadow:0 0 20px #ff00ff}
+        .status-dot.critical{background:#ff0000;border-color:#ff0000;box-shadow:0 0 20px #ff0000}
+        .status-dot.failed{background:#222;border-color:#222}
+        .popup-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:999998;animation:fadeIn 0.3s}
+        .popup-box{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#0a0a20,#1a0033);border:3px solid #ff00ff;padding:40px;font-family:'Press Start 2P',monospace;z-index:999999;text-align:center;box-shadow:0 0 100px #ff00ff33,inset 0 0 100px #00ff8811;min-width:350px;max-width:90%;animation:popIn 0.5s}
+        .popup-box .icon{font-size:50px;color:#ff00ff;text-shadow:0 0 40px #ff00ff;margin-bottom:15px;display:block}
+        .popup-box h2{color:#00ff88;font-size:16px;margin-bottom:15px}
+        .popup-box .path-box{background:#000;padding:15px;margin:15px 0;border:2px solid #00ff88;font-size:11px;word-break:break-all;color:#ff00ff}
+        .popup-box .hint{color:#00ff8844;font-size:8px;margin:10px 0}
+        .popup-box .btn-close{background:#00ff88;color:#000;border:none;padding:12px 35px;font-family:'Press Start 2P',monospace;cursor:pointer;font-size:10px;margin-top:15px;transition:0.3s}
+        .popup-box .btn-close:hover{box-shadow:0 0 40px #00ff8833;transform:scale(1.05)}
+        .hidden{display:none}
+        @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+        @keyframes popIn{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+        @media(max-width:768px){.grid-5{grid-template-columns:repeat(3,1fr)}.popup-box{min-width:auto;padding:25px}}
+        .lock-icon{font-size:24px;text-align:center;margin-bottom:10px;opacity:0.3}
+        .footer-text{color:#00ff8822;font-size:5px;text-align:center;margin-top:20px;letter-spacing:2px}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-panel">
+            <div class="header">
+                <h1>◈ CYBER VAULT ◈</h1>
+                <p>SECURE STORAGE v5.0 — MAXIMUM SECURITY</p>
+            </div>
+
+            <div style="text-align:center">
+                <div class="badge">FINAL LEVEL</div>
+                <div style="font-size:28px;color:#ff00ff;text-shadow:0 0 30px #ff00ff;margin:5px 0">🗄️</div>
+                <div style="width:50px;height:2px;background:linear-gradient(90deg,#00ff88,#ff00ff);margin:12px auto"></div>
+            </div>
+
+            <div class="hint-text">
+                ◆ <span>DECODE THE CORRECT CIPHER TO ACCESS THE VAULT</span> ◆
+            </div>
+
+            <div class="status-dots">
+                <div class="status-dot active"></div>
+                <div class="status-dot active"></div>
+                <div class="status-dot active"></div>
+                <div class="status-dot warning"></div>
+                <div class="status-dot critical"></div>
+            </div>
+
+            <div class="section-title">▼ ENCRYPTED TRANSMISSIONS ▼</div>
+            <div class="grid-5">
+                <div class="grid-item cipher">U2FsdGVkX1/9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="grid-item hash">SHA512: 7f83b1657ff1fc53b92dc18148a1d65d7f83b1657ff1fc53b92dc18148a1d65d</div>
+                <div class="grid-item cipher">AES: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="grid-item hash">MD5: 5f4dcc3b5aa765d61d8327deb882cf995f4dcc3b5aa765d61d8327deb882cf99</div>
+                <div class="grid-item cipher">RSA: 7f8d3e2c1b0a9f8e7d6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="grid-item hash">SHA256: 2cf24dba5fb0a30e26e83b2ac5b9e29e2cf24dba5fb0a30e26e83b2ac5b9e29e</div>
+                <div class="grid-item cipher">Base64: U2FsdGVkX1/9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="grid-item hash">SHA1: a94a8fe5ccb19ba61c4c0873d391e987a94a8fe5ccb19ba61c4c0873d391e987</div>
+                <div class="grid-item cipher">Hex: 48656c6c6f20576f726c642048656c6c6f20576f726c642048656c6c6f20576f726c642048656c6c6f20576f726c64</div>
+                <div class="grid-item hash">MD5: 7c6a180b36896a0a8c02787eeafb0e4c7c6a180b36896a0a8c02787eeafb0e4c</div>
+                <div class="grid-item cipher">ROT13: Uryyb Jbeyq Uryyb Jbeyq Uryyb Jbeyq Uryyb Jbeyq Uryyb Jbeyq</div>
+                <div class="grid-item hash">SHA512: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c</div>
+                <div class="grid-item cipher">Caesar: Khoor Zruog Khoor Zruog Khoor Zruog Khoor Zruog Khoor Zruog</div>
+                <div class="grid-item hash">MD5: 5f4dcc3b5aa765d61d8327deb882cf995f4dcc3b5aa765d61d8327deb882cf99</div>
+                <div class="grid-item cipher">Vigenere: 8f3d7e2c9b1a8f3d7e2c9b1a8f3d7e2c9b1a8f3d7e2c9b1a8f3d7e2c9b1a</div>
+            </div>
+
+            <div class="section-title">▼ SECURE HASH DATABASE ▼</div>
+            <div class="grid-5">
+                <div class="grid-item hash">bcrypt: $2y$10$NfavfpnQI4hIGqN.wrSKOe</div>
+                <div class="grid-item hash">SHA384: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="grid-item hash">MD5: e10adc3949ba59abbe56e057f20f883e</div>
+                <div class="grid-item hash">SHA256: 3f02d5e4c8b9a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3</div>
+                <div class="grid-item hash">SHA512: 7f83b1657ff1fc53b92dc18148a1d65d7f83b1657ff1fc53b92dc18148a1d65d</div>
+                <div class="grid-item hash">MD5: 7c6a180b36896a0a8c02787eeafb0e4c</div>
+                <div class="grid-item hash">SHA1: a94a8fe5ccb19ba61c4c0873d391e987</div>
+                <div class="grid-item hash">bcrypt: $2a$12$NfavfpnQI4hIGqN.wrSKOe9P7PObqzlvg3f8UQ0vMwF/hH3ctC/4C</div>
+                <div class="grid-item hash">SHA256: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c</div>
+                <div class="grid-item hash">MD5: 5f4dcc3b5aa765d61d8327deb882cf99</div>
+            </div>
+
+            <div class="vault-area">
+                <div class="lock-icon">🔒</div>
+                <label class="input-label">VAULT ACCESS CODE</label>
+                <input type="text" id="vault-input" class="code-input" placeholder="🔒 VAULT LOCKED — ADMIN OVERRIDE REQUIRED" autocomplete="off" disabled>
+                <div id="msg-area" class="msg-area"></div>
+                <button class="btn-vault" id="vault-btn" onclick="accessVault()" disabled>🔒 VAULT LOCKED</button>
+                <div class="attempt-display" id="attempt-display">◆ ATTEMPTS: 0/3 ◆</div>
+                <div style="color:#ff00ff22;font-size:6px;text-align:center;margin-top:10px;letter-spacing:2px">◆ OVERRIDE REQUIRED ◆</div>
+            </div>
+
+            <div class="footer-text">◆ SECURE CONNECTION ESTABLISHED ◆</div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div class="popup-box" id="popup-box" style="display:none">
+        <span class="icon">🔓</span>
+        <h2>VAULT PATH DISCOVERED</h2>
+        <div class="path-box" id="vault-path">/assets/vault.zip</div>
+        <div class="hint">PASSWORD: Check file extension</div>
+        <button class="btn-close" onclick="closePopup()">CONTINUE</button>
+    </div>
+
+    <script>
+        let attempts=0;
+        const MAX_ATTEMPTS=3;
+        let xssDetected=false;
+        let vaultUnlocked=false;
+
+        function enableVault(){
+            const input=document.getElementById('vault-input');
+            const btn=document.getElementById('vault-btn');
+            input.disabled=false;
+            btn.disabled=false;
+            input.placeholder="ENTER DECODED CIPHER TEXT...";
+            input.style.opacity="1";
+            btn.textContent="UNLOCK VAULT";
+            document.getElementById('msg-area').innerHTML='✓ ADMIN OVERRIDE ENABLED';
+            document.getElementById('msg-area').className='msg-area success';
+        }
+
+        function resetToLevel1(){
+            document.getElementById('msg-area').innerHTML='✗ SECURITY LOCKOUT — RESETTING...';
+            document.getElementById('msg-area').className='msg-area error';
+            localStorage.clear();
+            setTimeout(()=>{window.location.href='index.html';},2000);
+        }
+
+        function showPopup(path){
+            document.getElementById('vault-path').textContent=path;
+            document.getElementById('popup-overlay').style.display='block';
+            document.getElementById('popup-box').style.display='block';
+        }
+
+        function closePopup(){
+            document.getElementById('popup-overlay').style.display='none';
+            document.getElementById('popup-box').style.display='none';
+        }
+
+        function checkXSS(input){
+            const patterns=[
+                '<script','onerror','alert','onload','src=','javascript:',
+                'onclick','onmouse','onfocus','onchange','oninput','onkey',
+                'onerror=','onload=','onmouseover','onmouseout','onmousemove',
+                'onkeydown','onkeyup','onkeypress','onblur','onfocus=',
+                'onreset','onsubmit','onunload','onresize','onscroll',
+                'oncontextmenu','ondblclick','ondrag','ondrop','onwheel'
+            ];
+            for(let p of patterns){
+                if(input.toLowerCase().includes(p.toLowerCase())) return true;
+            }
+            return false;
+        }
+
+        window.accessVault=function(){
+            const input=document.getElementById('vault-input');
+            const msg=document.getElementById('msg-area');
+            const display=document.getElementById('attempt-display');
+
+            if(input.disabled){
+                msg.innerHTML='✗ ADMIN OVERRIDE REQUIRED';
+                msg.className='msg-area error';
+                return;
+            }
+
+            const val=input.value.trim();
+
+            if(!val){
+                msg.innerHTML='✗ ENTER CODE';
+                msg.className='msg-area error';
+                return;
+            }
+
+            if(checkXSS(val)){
+                if(!xssDetected){
+                    xssDetected=true;
+                    msg.innerHTML='✓ XSS DETECTED — ACCESS GRANTED';
+                    msg.className='msg-area success';
+                    display.textContent='◆ ACCESS GRANTED ◆';
+                    showPopup('/assets/vault.zip');
+                    localStorage.setItem('ctf_complete','true');
+                }
+                return;
+            }
+
+            attempts++;
+            const remaining=MAX_ATTEMPTS-attempts;
+            display.textContent='◆ ATTEMPTS: '+attempts+'/'+MAX_ATTEMPTS+' ◆';
+            const dots=document.querySelectorAll('.status-dot');
+
+            if(attempts===1){
+                dots[4].className='status-dot warning';
+                msg.innerHTML='✗ INVALID — '+remaining+' ATTEMPTS LEFT';
+                msg.className='msg-area warning';
+            }else if(attempts===2){
+                dots[3].className='status-dot warning';
+                msg.innerHTML='✗ INVALID — '+remaining+' ATTEMPTS LEFT';
+                msg.className='msg-area warning';
+            }else if(attempts>=3){
+                dots[2].className='status-dot critical';
+                dots[1].className='status-dot critical';
+                dots[0].className='status-dot critical';
+                resetToLevel1();
+            }
+        };
+
+        document.getElementById('vault-input').addEventListener('keydown',function(e){
+            if(e.key==='Enter'&&!this.disabled) window.accessVault();
+        });
+
+        document.addEventListener('keydown',function(e){
+            if(e.key==='Escape'){
+                closePopup();
+            }
+        });
+
+        console.log('%c🔒 VAULT LOCKED', 'color: #ff00ff; font-size: 16px;');
+        console.log('%c🔑 ADMIN OVERRIDE REQUIRED', 'color: #ff00ff; font-size: 12px;');
+        console.log('%c💡 Try injecting JavaScript in the input field', 'color: #ff00ff; font-size: 12px;');
+        console.log('%c📝 Example: <script>alert("XSS")<\/script>', 'color: #00ff88; font-size: 12px;');
+        console.log('%c⚠️ All decoded cipher texts will be rejected', 'color: #ff0000; font-size: 12px;');
+    </script>
+</body>
+</html>
