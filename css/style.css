@@ -1,117 +1,39 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-:root {
-    --green: #00ff41;
-    --green-dim: #00cc33;
-    --bg: #000000;
-    --bg-panel: #050f05;
-    --border: #00ff4133;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+body{background:#0a0a0a;color:#00ff88;font-family:'Press Start 2P',monospace;overflow-x:hidden;min-height:100vh}
 
-html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--green);
-    font-family: 'Share Tech Mono', monospace;
-    overflow-x: hidden;
-}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#000}
+::-webkit-scrollbar-thumb{background:#00ff88;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#ff00ff}
 
-#matrix {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    opacity: 0.15;
-    pointer-events: none;
-}
+.glow-text{text-shadow:0 0 20px #00ff88,0 0 40px #00ff8844}
+.glow-text-pink{text-shadow:0 0 20px #ff00ff,0 0 40px #ff00ff44}
 
-.content {
-    position: relative;
-    z-index: 10;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
+.pixel-border{border:3px solid #00ff88;box-shadow:0 0 30px #00ff8833,inset 0 0 30px #00ff8811}
+.pixel-border-pink{border:3px solid #ff00ff;box-shadow:0 0 30px #ff00ff33,inset 0 0 30px #ff00ff11}
 
-.panel {
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    padding: 30px;
-    max-width: 700px;
-    width: 100%;
-    position: relative;
-    box-shadow: 0 0 30px rgba(0,255,65,0.05);
-}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
+@keyframes float{0%{transform:translateY(0px)}50%{transform:translateY(-10px)}100%{transform:translateY(0px)}}
+@keyframes glitch{0%{text-shadow:2px 0 #ff00ff,-2px 0 #00ff88}25%{text-shadow:-2px 0 #ff00ff,2px 0 #00ff88}50%{text-shadow:2px 0 #00ff88,-2px 0 #ff00ff}75%{text-shadow:-2px 0 #00ff88,2px 0 #ff00ff}100%{text-shadow:none}}
 
-.panel::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
-}
+.glitch{animation:glitch 2s infinite}
 
-h1 {
-    font-size: clamp(1.2rem, 4vw, 2rem);
-    color: var(--green);
-    text-shadow: 0 0 20px var(--green);
-    margin-bottom: 15px;
-    letter-spacing: 0.1em;
-}
+.pulse{animation:pulse 1.5s ease-in-out infinite}
+.float{animation:float 3s ease-in-out infinite}
 
-hr.divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 20px 0;
-}
+.btn-game{background:transparent;border:2px solid #00ff88;color:#00ff88;padding:12px 30px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;transition:0.3s;text-transform:uppercase;letter-spacing:2px}
+.btn-game:hover{background:#00ff88;color:#000;box-shadow:0 0 40px #00ff8833}
 
-input[type="text"],
-input[type="password"] {
-    background: #000;
-    border: 1px solid #0f0;
-    color: #0f0;
-    padding: 10px;
-    font-family: 'Share Tech Mono', monospace;
-    width: 100%;
-    outline: none;
-    font-size: 14px;
-}
+.btn-game-pink{background:transparent;border:2px solid #ff00ff;color:#ff00ff;padding:12px 30px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;transition:0.3s;text-transform:uppercase;letter-spacing:2px}
+.btn-game-pink:hover{background:#ff00ff;color:#000;box-shadow:0 0 40px #ff00ff33}
 
-input:focus {
-    box-shadow: 0 0 20px rgba(0,255,0,0.1);
-}
+.terminal-input{width:100%;background:#000;border:2px solid #00ff88;color:#00ff88;padding:12px;font-family:'Press Start 2P',monospace;font-size:10px;margin:10px 0;outline:none;box-shadow:inset 0 0 20px #00ff8811}
+.terminal-input:focus{border-color:#ff00ff;box-shadow:0 0 30px #ff00ff22,inset 0 0 30px #ff00ff11}
 
-button {
-    background: transparent;
-    border: 1px solid #0f0;
-    color: #0f0;
-    padding: 10px 30px;
-    font-family: 'Share Tech Mono', monospace;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-}
+.game-panel{background:rgba(10,10,20,0.95);border:3px solid #ff00ff;padding:35px;max-width:700px;width:100%;box-shadow:0 0 60px #ff00ff22,inset 0 0 60px #00ff8811;position:relative}
+.game-panel::before{content:'';position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border:2px solid #00ff88;z-index:-1;opacity:0.3}
 
-button:hover {
-    background: #0f0;
-    color: #000;
-    box-shadow: 0 0 30px rgba(0,255,0,0.2);
-}
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #0f0; opacity: 0.3; }
-
-@media (max-width: 600px) {
-    .panel { padding: 20px; }
-    .vault-grid { grid-template-columns: repeat(2, 1fr); }
-}
+@media(max-width:600px){.game-panel{padding:20px}.cipher-grid{grid-template-columns:1fr}.hash-grid{grid-template-columns:1fr}.vault-grid{grid-template-columns:repeat(2,1fr)}}
