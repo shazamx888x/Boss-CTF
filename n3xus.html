@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CROSS BANK - Final Level</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body{background:radial-gradient(ellipse at center,#0a0a20,#000);font-family:'Press Start 2P',monospace;min-height:100vh;padding:20px;margin:0}
+        .bank-container{max-width:1000px;margin:0 auto}
+        .bank-panel{background:rgba(10,10,20,0.95);border:3px solid #ff00ff;padding:35px;box-shadow:0 0 60px #ff00ff22,inset 0 0 60px #00ff8811;position:relative}
+        .bank-header{background:linear-gradient(135deg,#1a0033,#0a0a20);border:2px solid #00ff8833;padding:20px;margin-bottom:20px;text-align:center}
+        .bank-name{font-size:24px;color:#ff00ff;text-shadow:0 0 30px #ff00ff,0 0 60px #ff00ff44;letter-spacing:4px}
+        .bank-slogan{color:#00ff8844;font-size:8px;margin-top:5px;letter-spacing:3px}
+        .cipher-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:15px 0}
+        .cipher-item{background:#000;border:1px solid #00ff8833;padding:8px;font-size:6px;text-align:center;color:#00ff8844;word-break:break-all;min-height:50px;display:flex;align-items:center;justify-content:center;transition:0.3s}
+        .cipher-item:hover{border-color:#ff00ff55;box-shadow:0 0 20px #ff00ff11}
+        .hash-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:15px 0}
+        .hash-item{background:#000;border:1px solid #ff00ff33;padding:8px;font-size:5px;text-align:center;color:#ff00ff33;word-break:break-all;min-height:40px;display:flex;align-items:center;justify-content:center;transition:0.3s}
+        .hash-item:hover{border-color:#ff00ff55;box-shadow:0 0 20px #ff00ff11}
+        .vault-input{width:100%;background:#000;border:2px solid #ff00ff;color:#00ff88;padding:12px;font-family:'Press Start 2P',monospace;font-size:10px;margin:10px 0;outline:none;box-shadow:inset 0 0 30px #ff00ff11;display:block}
+        .vault-input:focus{border-color:#00ff88;box-shadow:0 0 40px #00ff8822,inset 0 0 40px #00ff8811}
+        .vault-input:disabled{opacity:0.15;cursor:not-allowed;border-color:#333;color:#333}
+        .vault-input:not(:disabled){opacity:1}
+        .btn-vault{background:transparent;border:2px solid #ff00ff;color:#ff00ff;padding:12px 30px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;transition:0.3s;width:100%;display:block}
+        .btn-vault:hover:not(:disabled){background:#ff00ff;color:#000;box-shadow:0 0 40px #ff00ff33}
+        .btn-vault:disabled{opacity:0.15;cursor:not-allowed;border-color:#333;color:#333}
+        .btn-vault:not(:disabled){opacity:1}
+        .security-level{display:flex;gap:5px;justify-content:center;margin:15px 0}
+        .security-dot{width:15px;height:15px;border:2px solid #00ff8833;background:#000;transition:0.3s}
+        .security-dot.active{background:#00ff88;box-shadow:0 0 20px #00ff88}
+        .security-dot.warning{background:#ff00ff;box-shadow:0 0 20px #ff00ff}
+        .security-dot.critical{background:#ff0000;box-shadow:0 0 20px #ff0000}
+        .attempt-counter{color:#ff00ff44;font-size:8px;text-align:center;margin-top:10px}
+        .hint-box{background:rgba(255,0,255,0.05);border:1px solid #ff00ff33;padding:15px;margin:15px 0;text-align:center;color:#ff00ff66;font-size:8px}
+        .hint-box span{color:#ff00ffaa}
+        .disabled-hint{color:#ff00ff22;font-size:6px;text-align:center;margin-top:10px}
+        .section-title{color:#00ff8844;font-size:7px;text-align:center;margin:10px 0;letter-spacing:2px}
+        .vault-section{background:rgba(0,0,0,0.5);border:1px solid #ff00ff33;padding:20px;margin:20px 0}
+        .success-box{display:none;margin-top:20px;padding:20px;border:3px solid #00ff88;background:rgba(0,255,136,0.05);text-align:center}
+        .success-box.show{display:block}
+        .success-box .msg{color:#00ff88;font-size:12px}
+        .success-box .path{color:#ff00ff;font-size:10px;padding:10px;background:#000;border:1px solid #ff00ff;margin:10px 0;word-break:break-all}
+        .input-label{color:#00ff8844;font-size:9px;display:block;margin-bottom:5px}
+        .code-input{width:100%;background:#000;border:2px solid #ff00ff;color:#00ff88;padding:12px;font-family:'Press Start 2P',monospace;font-size:10px;margin:10px 0;outline:none;box-shadow:inset 0 0 30px #ff00ff11;display:block}
+        .code-input:focus{border-color:#00ff88;box-shadow:0 0 40px #00ff8822,inset 0 0 40px #00ff8811}
+        .code-input:disabled{opacity:0.15;cursor:not-allowed;border-color:#333;color:#333}
+        .code-input:not(:disabled){opacity:1}
+        .reset-msg{color:#ff0000;font-size:8px;text-align:center;margin-top:10px}
+    </style>
+</head>
+<body>
+    <div class="bank-container">
+        <div class="bank-panel">
+            <div class="bank-header">
+                <div class="bank-name">◈ CROSS BANK LIMITED ◈</div>
+                <div class="bank-slogan">SECURE VAULT v4.2.1 — ENCRYPTED CHANNEL</div>
+            </div>
+
+            <div style="text-align:center;margin-bottom:20px">
+                <div style="font-size:30px;color:#ff00ff;text-shadow:0 0 30px #ff00ff">🏦</div>
+                <h1 style="color:#00ff88;font-size:14px;margin-top:10px">VAULT ACCESS</h1>
+                <div style="width:40px;height:2px;background:linear-gradient(90deg,#00ff88,#ff00ff);margin:15px auto"></div>
+            </div>
+
+            <div class="hint-box">
+                ◆ <span>DECODE THE CORRECT CIPHER TEXT TO GET ACCESS</span> ◆
+            </div>
+
+            <div class="security-level">
+                <div class="security-dot active"></div>
+                <div class="security-dot active"></div>
+                <div class="security-dot active"></div>
+                <div class="security-dot warning"></div>
+                <div class="security-dot critical"></div>
+            </div>
+
+            <div class="section-title">▼ CIPHER TEXTS ▼</div>
+            <div class="cipher-grid">
+                <div class="cipher-item">U2FsdGVkX1/9f8d7e6c5b4a3</div>
+                <div class="cipher-item">AES: 9f8d7e6c5b4a3f2d</div>
+                <div class="cipher-item">RSA: 2048-bit 7f8d3e2c</div>
+                <div class="cipher-item">SHA256: 7d8f3e2c1b0a9f8e</div>
+                <div class="cipher-item">MD5: e10adc3949ba59ab</div>
+                <div class="cipher-item">Base64: SGVsbG8gV29ybGQ=</div>
+                <div class="cipher-item">Hex: 48656c6c6f20576f726c64</div>
+                <div class="cipher-item">ROT13: Uryyb Jbeyq</div>
+                <div class="cipher-item">Caesar: Khoor Zruog</div>
+                <div class="cipher-item">Vigenere: 8f3d7e2c9b1a</div>
+            </div>
+
+            <div class="section-title">▼ HASH DATABASE ▼</div>
+            <div class="hash-grid">
+                <div class="hash-item">SHA512: 7f83b1657ff1fc53b92dc18148a1d65d</div>
+                <div class="hash-item">MD5: 5f4dcc3b5aa765d61d8327deb882cf99</div>
+                <div class="hash-item">SHA256: 2cf24dba5fb0a30e26e83b2ac5b9e29e</div>
+                <div class="hash-item">SHA1: a94a8fe5ccb19ba61c4c0873d391e987</div>
+                <div class="hash-item">MD5: 7c6a180b36896a0a8c02787eeafb0e4c</div>
+                <div class="hash-item">SHA256: 3f02d5e4c8b9a7f6e5d4c3b2a1f0e9d8</div>
+                <div class="hash-item">SHA512: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c</div>
+                <div class="hash-item">MD5: 5f4dcc3b5aa765d61d8327deb882cf99</div>
+                <div class="hash-item">SHA1: 7c6a180b36896a0a8c02787eeafb0e4c</div>
+                <div class="hash-item">SHA256: 9f8d7e6c5b4a3f2d1e0c9b8a7f6e5d4c</div>
+            </div>
+
+            <div class="vault-section">
+                <div style="margin-bottom:15px">
+                    <label class="input-label">VAULT ACCESS CODE</label>
+                    <input type="text" id="vault-input" class="code-input" placeholder="🔒 VAULT LOCKED - ADMIN OVERRIDE REQUIRED" autocomplete="off" disabled>
+                    <div id="vault-msg" style="font-size:9px;min-height:20px;color:#ff00ff;margin-top:5px"></div>
+                </div>
+
+                <button class="btn-vault" id="vault-btn" onclick="accessVault()" disabled>🔒 VAULT LOCKED</button>
+                <div class="attempt-counter" id="attempt-display">◆ ATTEMPTS: 0/1 ◆</div>
+                <div class="disabled-hint">◆ ADMIN OVERRIDE REQUIRED ◆</div>
+                <div id="reset-msg" class="reset-msg" style="display:none">✗ SECURITY LOCKOUT - RESETTING...</div>
+            </div>
+
+            <div class="success-box" id="success-box">
+                <div style="font-size:30px;color:#ff00ff;text-shadow:0 0 30px #ff00ff">🔓</div>
+                <div class="msg">VAULT PATH DISCOVERED</div>
+                <div class="path" id="vault-path">/assets/vault.zip</div>
+                <div style="color:#00ff8844;font-size:8px;margin:10px 0">PASSWORD: Check file extension</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let xssTriggered=false;
+
+        function enableVault(){
+            const input = document.getElementById('vault-input');
+            const btn = document.getElementById('vault-btn');
+            input.disabled = false;
+            btn.disabled = false;
+            input.placeholder = "ENTER DECODED CIPHER TEXT...";
+            input.style.opacity = "1";
+            btn.textContent = "UNLOCK VAULT";
+            document.getElementById('vault-msg').innerHTML = '✓ ADMIN OVERRIDE ENABLED';
+            document.getElementById('vault-msg').style.color = '#00ff88';
+            document.getElementById('attempt-display').textContent = '◆ ATTEMPTS: 0/1 ◆';
+        }
+
+        function resetToLevel1(){
+            document.getElementById('reset-msg').style.display = 'block';
+            document.getElementById('vault-msg').innerHTML = '✗ SECURITY LOCKOUT - RESETTING...';
+            document.getElementById('vault-msg').style.color = '#ff0000';
+            localStorage.clear();
+            setTimeout(()=>{window.location.href = 'index.html';},2000);
+        }
+
+        function showSuccess(){
+            document.getElementById('success-box').classList.add('show');
+            document.getElementById('vault-input').disabled = true;
+            document.getElementById('vault-btn').disabled = true;
+            document.getElementById('vault-btn').textContent = '🔒 VAULT LOCKED';
+            document.getElementById('attempt-display').textContent = '◆ ACCESS GRANTED ◆';
+            localStorage.setItem('ctf_complete', 'true');
+        }
+
+        window.accessVault = function(){
+            const input = document.getElementById('vault-input');
+            const msg = document.getElementById('vault-msg');
+            const display = document.getElementById('attempt-display');
+
+            if(input.disabled){
+                msg.innerHTML = '✗ ADMIN OVERRIDE REQUIRED';
+                msg.style.color = '#ff00ff';
+                return;
+            }
+
+            const val = input.value.trim();
+
+            if(!val){
+                msg.innerHTML = '✗ ENTER CODE';
+                msg.style.color = '#ff00ff';
+                return;
+            }
+
+            if(val.includes('<script') || val.includes('onerror') || val.includes('alert') ||
+               val.includes('onload') || val.includes('src=') || val.includes('javascript:') ||
+               val.includes('onclick') || val.includes('onmouse') || val.includes('onfocus') ||
+               val.includes('onchange') || val.includes('oninput') || val.includes('onkey') ||
+               val.includes('onerror') || val.includes('onload') || val.includes('onmouseover') ||
+               val.includes('onmouseout') || val.includes('onmousemove') || val.includes('onkeydown') ||
+               val.includes('onkeyup') || val.includes('onkeypress') || val.includes('onblur') ||
+               val.includes('onfocus') || val.includes('onreset') || val.includes('onsubmit') ||
+               val.includes('onunload') || val.includes('onresize') || val.includes('onscroll')){
+                
+                if(!xssTriggered){
+                    xssTriggered = true;
+                    enableVault();
+                    msg.innerHTML = '✓ XSS DETECTED - VAULT UNLOCKED';
+                    msg.style.color = '#00ff88';
+                    display.textContent = '◆ ENTER ANY CODE TO PROCEED ◆';
+                    
+                    setTimeout(function(){
+                        showSuccess();
+                        msg.innerHTML = '✓ ACCESS GRANTED - PATH GENERATED';
+                        msg.style.color = '#00ff88';
+                    }, 3000);
+                }
+                return;
+            }
+
+            resetToLevel1();
+        };
+
+        document.getElementById('vault-input').addEventListener('keydown', function(e){
+            if(e.key === 'Enter' && !this.disabled) window.accessVault();
+        });
+
+        console.log('%c🔓 VAULT LOCKED', 'color: #ff00ff; font-size: 16px;');
+        console.log('%c🔑 ADMIN OVERRIDE REQUIRED', 'color: #ff00ff; font-size: 12px;');
+        console.log('%c💡 Inject XSS to unlock the vault', 'color: #ff00ff; font-size: 12px;');
+        console.log('%c📝 Any cipher text entered will reset to Level 1', 'color: #ff0000; font-size: 12px;');
+    </script>
+</body>
+</html>
